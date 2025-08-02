@@ -2,6 +2,7 @@ package com.example.afraid.physical.domain
 
 import com.example.afraid.generateDocumentId
 import com.example.afraid.physical.domain.type.Status
+import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.math.BigDecimal
@@ -9,25 +10,54 @@ import java.time.LocalDate
 
 
 // 심장
+@Schema(description = "심장 건강 정보")
 @Document
 data class Heart(
+    @Schema(description = "고유 ID", example = "heart_123456789")
     @Id val id: String = generateDocumentId(),
+    
+    @Schema(description = "건강 상태", example = "GOOD")
     val status: Status,
+    
+    @Schema(description = "사용자 ID", example = "1001")
     val userId: Long,
+    
+    @Schema(description = "수축기 혈압 (mmHg)", example = "120")
     val systolicBp: Short? = null,
+    
+    @Schema(description = "이완기 혈압 (mmHg)", example = "80")
     val diastolicBp: Short? = null,
+    
+    @Schema(description = "심박수 (bpm)", example = "72")
     val heartRate: Byte? = null,
+    
+    @Schema(description = "총 콜레스테롤 (mg/dL)", example = "180")
     val totalCholesterol: Short? = null,
+    
+    @Schema(description = "HDL 콜레스테롤 (mg/dL)", example = "50")
     val hdlCholesterol: Short? = null,
+    
+    @Schema(description = "LDL 콜레스테롤 (mg/dL)", example = "100")
     val ldlCholesterol: Short? = null,
+    
+    @Schema(description = "중성지방 (mg/dL)", example = "120")
     val triglycerides: Short? = null,
+    
+    @Schema(description = "심전도 소견", example = "정상동율동")
     val ecgFindings: String? = null,
+    
+    @Schema(description = "심초음파 EF (%)", example = "60")
     val echocardiogramEf: Byte? = null,
+    
+    @Schema(description = "좌심실벽 두께 (mm)", example = "10.5")
     val lvWallThickness: BigDecimal? = null,
+    
+    @Schema(description = "검사일", example = "2024-01-15")
     val examDate: LocalDate? = null,
 )
 
 // 뼈
+@Schema(description = "뼈 건강 정보")
 @Document
 data class Bone(
     @Id val id: String = generateDocumentId(),
@@ -42,6 +72,7 @@ data class Bone(
 )
 
 // 척추
+@Schema(description = "척추 건강 정보")
 @Document
 data class Spine(
     @Id val id: String = generateDocumentId(),
@@ -57,6 +88,7 @@ data class Spine(
 )
 
 // 눈
+@Schema(description = "눈 건강 정보")
 @Document
 data class Eye(
     @Id val id: String = generateDocumentId(),
@@ -78,6 +110,7 @@ data class Eye(
 )
 
 // 폐
+@Schema(description = "폐 건강 정보")
 @Document
 data class Lung(
     @Id val id: String = generateDocumentId(),
