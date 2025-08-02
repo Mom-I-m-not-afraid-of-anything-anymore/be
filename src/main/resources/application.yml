@@ -1,0 +1,118 @@
+spring:
+  application:
+    name: afraid
+  
+  # MongoDB 설정
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: afraid_db
+      # 인증이 필요한 경우 아래 주석 해제
+      # username: ${MONGO_USERNAME:admin}
+      # password: ${MONGO_PASSWORD:password}
+      # authentication-database: admin
+  
+  # Jackson 설정 (JSON 직렬화/역직렬화)
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+    time-zone: Asia/Seoul
+  
+  # JPA 설정 (MongoDB와 함께 사용할 경우 비활성화)
+  jpa:
+    hibernate:
+      ddl-auto: none
+  
+  # 프로파일 설정
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
+# 서버 설정
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# 로깅 설정
+logging:
+  level:
+    com.example.afraid: ${LOG_LEVEL:DEBUG}
+    org.springframework.data.mongodb: ${LOG_LEVEL:INFO}
+    org.mongodb.driver: ${LOG_LEVEL:INFO}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# 관리 및 모니터링 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+---
+# 로컬 개발 환경
+spring:
+  config:
+    activate:
+      on-profile: local
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: afraid_local_db
+
+logging:
+  level:
+    com.example.afraid: DEBUG
+
+---
+# 개발 환경
+spring:
+  config:
+    activate:
+      on-profile: dev
+  data:
+    mongodb:
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_PORT:27017}
+      database: afraid_dev_db
+      username: ${MONGO_USERNAME:}
+      password: ${MONGO_PASSWORD:}
+
+logging:
+  level:
+    com.example.afraid: INFO
+
+---
+# 운영 환경
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/afraid_prod_db}
+      # 클러스터 설정
+      # uri: mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_CLUSTER}/afraid_prod_db?retryWrites=true&w=majority
+
+logging:
+  level:
+    com.example.afraid: WARN
+    org.springframework.data.mongodb: WARN
+    org.mongodb.driver: WARN
+
+server:
+  port: ${PORT:8080}
